@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Detailed Registration Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    form {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      font-size: 1.1rem;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 1.1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      transition: border-color 0.3s ease;
+      font-family: inherit;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    textarea:focus {
+      border-color: #007BFF;
+      outline: none;
+    }
+    .error {
+      background: #ffe6e6;
+      border: 1px solid #ff4d4d;
+      padding: 8px 12px;
+      border-radius: 5px;
+      color: #b30000;
+      font-size: 0.95rem;
+      margin-top: 6px;
+      min-height: 1.3em;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 14px;
+      font-size: 1.2rem;
+      background-color: #007BFF;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h2>User Registration</h2>
+  <form id="registrationForm" novalidate>
+    <div>
+      <label for="username">Username *</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" required />
+      <div class="error" id="usernameError"></div>
+    </div>
+
+    <div>
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" placeholder="example@mail.com" required />
+      <div class="error" id="emailError"></div>
+    </div>
+
+    <div>
+      <label for="password">Password *</label>
+      <input type="password" id="password" name="password" placeholder="At least 6 characters" required minlength="6" />
+      <div class="error" id="passwordError"></div>
+    </div>
+
+    <div>
+      <label for="confirmPassword">Confirm Password *</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter your password" required />
+      <div class="error" id="confirmPasswordError"></div>
+    </div>
+
+    <div>
+      <label for="address">Address *</label>
+      <textarea id="address" name="address" rows="4" placeholder="Your full address (min 10 characters)" required></textarea>
+      <div class="error" id="addressError"></div>
+    </div>
+
+    <div>
+      <label for="pincode">Pincode *</label>
+      <input type="text" id="pincode" name="pincode" placeholder="6-digit pincode" required maxlength="6" />
+      <div class="error" id="pincodeError"></div>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+
+    const errors = {
+      username: document.getElementById('usernameError'),
+      email: document.getElementById('emailError'),
+      password: document.getElementById('passwordError'),
+      confirmPassword: document.getElementById('confirmPasswordError'),
+      address: document.getElementById('addressError'),
+      pincode: document.getElementById('pincodeError')
+    };
+
+    function validateUsername() {
+      const username = form.username.value.trim();
+      if (username === '') {
+        errors.username.textContent = 'Username is required.';
+        return false;
+      }
+      errors.username.textContent = '';
+      return true;
+    }
+
+    function validateEmail() {
+      const email = form.email.value.trim();
+      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email === '') {
+        errors.email.textContent = 'Email is required.';
+        return false;
+      } else if (!pattern.test(email)) {
+        errors.email.textContent = 'Enter a valid email address.';
+        return false;
+      }
+      errors.email.textContent = '';
+      return true;
+    }
+
+    function validatePassword() {
+      const password = form.password.value;
+      if (password.length < 6) {
+        errors.password.textContent = 'Password must be at least 6 characters.';
+        return false;
+      }
+      errors.password.textContent = '';
+      return true;
+    }
+
+    function validateConfirmPassword() {
+      const password = form.password.value;
+      const confirmPassword = form.confirmPassword.value;
+      if (confirmPassword !== password) {
+        errors.confirmPassword.textContent = 'Passwords do not match.';
+        return false;
+      }
+      errors.confirmPassword.textContent = '';
+      return true;
+    }
+
+    function validateAddress() {
+      const address = form.address.value.trim();
+      if (address.length < 10) {
+        errors.address.textContent = 'Address must be at least 10 characters.';
+        return false;
+      }
+      errors.address.textContent = '';
+      return true;
+    }
+
+    function validatePincode() {
+      const pincode = form.pincode.value.trim();
+      const pattern = /^\d{6}$/;
+      if (!pattern.test(pincode)) {
+        errors.pincode.textContent = 'Pincode must be exactly 6 digits.';
+        return false;
+      }
+      errors.pincode.textContent = '';
+      return true;
+    }
+
+    form.username.addEventListener('input', validateUsername);
+    form.email.addEventListener('input', validateEmail);
+    form.password.addEventListener('input', () => {
+      validatePassword();
+      validateConfirmPassword();
+    });
+    form.confirmPassword.addEventListener('input', validateConfirmPassword);
+    form.address.addEventListener('input', validateAddress);
+    form.pincode.addEventListener('input', validatePincode);
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const valid = [
+        validateUsername(),
+        validateEmail(),
+        validatePassword(),
+        validateConfirmPassword(),
+        validateAddress(),
+        validatePincode()
+      ].every(Boolean);
+
+      if (valid) {
+        alert('Registration successful!');
+        form.reset();
+        Object.values(errors).forEach(el => (el.textContent = ''));
+      }
+    });
+  </script>
+</body>
+</html>
+
